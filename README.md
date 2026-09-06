@@ -1,21 +1,21 @@
-# ZentyTeams SDK
-## Official Client SDK — ZentyTeamsCore DARKINT 3-IN-1 Platform
+﻿# ZentyTeams SDK
+## Official Client SDK ΓÇö ZentyTeamsCore DARKINT 3-IN-1 Platform
 
-> *"Kita serang sistem kita sendiri lebih keras dari hacker manapun —*
+> *"Kita serang sistem kita sendiri lebih keras dari hacker manapun ΓÇö*
 > *supaya kita tahu di mana lubangnya SEBELUM hacker sungguhan menemukannya."*
 
 ---
 
-## 🌐 Ekosistem CTAR.Tech yang Dilindungi SDK Ini
+## ≡ƒîÉ Ekosistem CTAR.Tech yang Dilindungi SDK Ini
 
-SDK ini dirancang untuk **menjaga semua ekosistem berikut tetap aman** — baik internal CTAR.Tech maupun ekosistem pengguna/klien:
+SDK ini dirancang untuk **menjaga semua ekosistem berikut tetap aman** ΓÇö baik internal CTAR.Tech maupun ekosistem pengguna/klien:
 
 | # | Platform | Domain / Fungsi | Risiko Utama |
 |---|----------|-----------------|--------------|
 | 1 | **ZentyTeamsCore** | Security Platform itu sendiri | Self-integrity |
 | 2 | **SentinentalOps** | Enterprise Ops & Incident Command | Auth bypass, data leak |
 | 3 | **CTARTech ZentyCore** | Zero-Trust Security Platform | Token manipulation |
-| 4 | **ZentyFinSen** | AI Data Bank — Financial Intel | Payment logic, data exfil |
+| 4 | **ZentyFinSen** | AI Data Bank ΓÇö Financial Intel | Payment logic, data exfil |
 | 5 | **ZentyElastis** | GPU/AI Compute Cloud | Resource abuse, backdoor |
 | 6 | **ZentyOps** | Operations Platform | Supply chain attack |
 | 7 | **ZentyCare-ClinicalOps** | Clinical Ops & Biopharma | Patient data breach |
@@ -24,25 +24,25 @@ SDK ini dirancang untuk **menjaga semua ekosistem berikut tetap aman** — baik 
 | 10 | **Nantara OS** | Custom Operating System | Kernel exploit, rootkit |
 | 11 | **WebPay / QRIS Systems** | Payment Gateway | QRIS manipulation, race condition |
 | 12 | **gplay.ctar.tech** | Central AI Data Bank | Central point attack |
-| ∞ | **Ekosistem Klien** | Semua sistem klien CTAR.Tech | Semua vektor |
+| Γê₧ | **Ekosistem Klien** | Semua sistem klien CTAR.Tech | Semua vektor |
 
-> **Prinsip**: Jika Red Team kita tidak bisa menembusnya → kita yakin hacker lain juga kesulitan.
-> Jika Red Team berhasil tembus → kita segera perkuat Blue Team & Antivirus-nya.
-
----
-
-## 📦 Available SDKs
-
-| Language | Path | Package |
-|----------|------|---------|
-| 🦀 **Rust** | `sdk/rust/` | `zentyteams-sdk` (Cargo) |
-| 🐍 **Python** | `sdk/python/` | `zentyteams` (pip) |
-| 🐹 **Go** | `sdk/go/` | `zentyteams` (go module) |
-| 🟦 **Node.js/TypeScript** | `sdk/node/` | `@ctar/zentyteams` (npm) |
+> **Prinsip**: Jika Red Team kita tidak bisa menembusnya ΓåÆ kita yakin hacker lain juga kesulitan.
+> Jika Red Team berhasil tembus ΓåÆ kita segera perkuat Blue Team & Antivirus-nya.
 
 ---
 
-## ⚡ Quick Start
+## ≡ƒôª Available SDKs & Installation
+
+| Language | Directory | Package Name | One-Line Install Command |
+|----------|-----------|--------------|--------------------------|
+| ≡ƒªÇ **Rust** | `rust/` | `zentyteams-sdk` | `cargo add zentyteams-sdk --git https://github.com/camanit/ZentyTeamsCoreSdks` |
+| ≡ƒÉì **Python** | `python/` | `zentyteams-sdk` | `pip install "git+https://github.com/camanit/ZentyTeamsCoreSdks.git#subdirectory=python"` |
+| ≡ƒÉ╣ **Go** | `go/` | `github.com/camanit/ZentyTeamsCoreSdks/go` | `go get github.com/camanit/ZentyTeamsCoreSdks/go` |
+| ≡ƒƒª **Node.js/TS** | `node/` | `@ctar/zentyteams` | `npm install "https://github.com/camanit/ZentyTeamsCoreSdks.git#subdirectory=node"` |
+
+---
+
+## ΓÜí Quick Start
 
 ### Rust
 ```rust
@@ -57,8 +57,8 @@ async fn main() {
         AgentRole::RedTeam,
     );
 
-    // ── PHASE 1: Red menyerang, Blue nonaktif ─────────────────────
-    // Mulai sesi — Purple otomatis merekam
+    // ΓöÇΓöÇ PHASE 1: Red menyerang, Blue nonaktif ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    // Mulai sesi ΓÇö Purple otomatis merekam
     let session = client.start_battle_session(
         "api.zentyelastis.ctar.tech",
         BattlePhase::UndefendedAttack,
@@ -74,7 +74,7 @@ async fn main() {
         BattlePhase::UndefendedAttack,
     ).await.unwrap();
 
-    // Akhiri — Purple generate laporan otomatis
+    // Akhiri ΓÇö Purple generate laporan otomatis
     client.end_battle_session(&session).await.unwrap();
 }
 ```
@@ -91,7 +91,7 @@ client = ZentyTeamsClient(
     role=AgentRole.RED_TEAM,
 )
 
-# Phase 2: Red vs Blue — uji apakah Blue bisa menahan
+# Phase 2: Red vs Blue ΓÇö uji apakah Blue bisa menahan
 session = client.start_battle_session(
     target="gplay.ctar.tech",
     phase=BattlePhase.RED_VS_BLUE,
@@ -153,84 +153,84 @@ func main() {
 
 ---
 
-## 🎯 3 Battle Phases
+## ≡ƒÄ» 3 Battle Phases
 
 ```
-PHASE 1 — UNDEFENDED_ATTACK
-  ✅ Red Team aktif     ❌ Blue Team off     ✅ Purple SELALU ON
+PHASE 1 ΓÇö UNDEFENDED_ATTACK
+  Γ£à Red Team aktif     Γ¥î Blue Team off     Γ£à Purple SELALU ON
   Tujuan: Temukan SEMUA kelemahan sistem tanpa ada yang menahan.
   "Seberapa lemah sistem ini jika tidak ada yang menjaganya?"
 
-PHASE 2 — RED_VS_BLUE
-  ✅ Red Team aktif     ✅ Blue Team aktif   ✅ Purple SELALU ON
+PHASE 2 ΓÇö RED_VS_BLUE
+  Γ£à Red Team aktif     Γ£à Blue Team aktif   Γ£à Purple SELALU ON
   Tujuan: Uji seberapa kuat Blue Team menahan serangan Red.
   "Seberapa tangguh pertahanan kita melawan serangan yang kita tahu?"
 
-PHASE 3 — FULL_ECOSYSTEM
-  ✅ Red Team aktif     ✅ Blue Team aktif   ✅ Purple SELALU ON
-  ✅ Dark Intel aktif   ✅ Antivirus aktif   ✅ SDK di semua sistem
-  Tujuan: Operasi penuh 24/7 — kondisi dunia nyata.
+PHASE 3 ΓÇö FULL_ECOSYSTEM
+  Γ£à Red Team aktif     Γ£à Blue Team aktif   Γ£à Purple SELALU ON
+  Γ£à Dark Intel aktif   Γ£à Antivirus aktif   Γ£à SDK di semua sistem
+  Tujuan: Operasi penuh 24/7 ΓÇö kondisi dunia nyata.
   "Apakah ekosistem kita aman dari ancaman global yang terus berubah?"
 ```
 
 ---
 
-## 🧩 SDK Architecture
+## ≡ƒº⌐ SDK Architecture
 
 ```
 zentyteams-sdk
-│
-├── client       → ZentyTeamsClient (core HTTP client)
-├── types        → Semua struct: AttackEvent, DefenseEvent, ThreatIoc, dll
-├── error        → ZentyError (HttpError, ConsentDenied, ScopeViolation, dll)
-│
-├── red          → Red Team methods:
-│   ├── report_sqli(), report_xss(), report_rce(), report_ssrf()
-│   ├── report_payment_attack(), report_api_fuzz(), report_mitm()
-│   ├── report_brute_force(), report_jwt_attack()
-│   ├── report_supply_chain_attack(), report_social_engineering()
-│   ├── report_ransomware_sim() — simulasi ransomware di sandbox
-│   ├── report_malware_sim()   — simulasi malware di sandbox  ← OFFENSIVE TOOL
-│   └── report_spyware_sim()   — simulasi spyware di sandbox  ← OFFENSIVE TOOL
-│
-├── blue         → Blue Team methods:
-│   ├── report_anomaly(), report_ip_blocked(), report_session_killed()
-│   ├── report_patch_applied(), report_firewall_rule()
-│   ├── report_quarantine(), report_av_scan()
-│   ├── report_ransomware_detected()   ← ANTIVIRUS
-│   ├── report_spyware_detected()      ← ANTI-SPYWARE
-│   ├── report_rootkit_detected()      ← ANTI-ROOTKIT
-│   ├── request_auto_remediation()     ← AI AUTO-PATCH
-│   └── scan_artifact()                ← INTEGRITY SCANNER
-│
-├── purple       → Purple Team methods (ALWAYS ON):
-│   ├── send_telemetry()     ← Merkle Chain audit log
-│   ├── start_battle_session() / end_battle_session()
-│   ├── correlate_events()   ← hubungkan Red event ↔ Blue event
-│   ├── get_risk_matrix()    ← CVSS auto-scoring
-│   ├── generate_report()    ← EXECUTIVE / TECHNICAL / COMPLIANCE
-│   └── get_audit_trail()    ← full Merkle chain log
-│
-└── dark_intel   → Dark Intelligence methods:
-    ├── report_ioc(), get_threat_feed()
-    ├── check_credential_leak()        ← SURFACE WEB
-    ├── report_github_leak()           ← SURFACE WEB
-    ├── report_exposed_service()       ← SHODAN/CENSYS
-    ├── report_underground_intel()     ← DEEP WEB
-    ├── report_tor_intel()             ← DARK WEB (Tor)
-    ├── report_i2p_intel()             ← DARK WEB (I2P)
-    ├── report_anon_network_intel()    ← FREENET/ZERONET/LOKINET
-    ├── report_zero_day()              ← ZERO-DAY INTEL
-    ├── check_exploit_availability()   ← EXPLOIT MARKET MONITOR
-    ├── report_red_c2_sim()            ← C2 SIMULATION
-    ├── report_red_exfil_sim()         ← EXFILTRATION SIMULATION
-    ├── report_apt_simulation()        ← APT MULTI-STAGE SIM
-    └── map_to_mitre()                 ← MITRE ATT&CK MAPPING
+Γöé
+Γö£ΓöÇΓöÇ client       ΓåÆ ZentyTeamsClient (core HTTP client)
+Γö£ΓöÇΓöÇ types        ΓåÆ Semua struct: AttackEvent, DefenseEvent, ThreatIoc, dll
+Γö£ΓöÇΓöÇ error        ΓåÆ ZentyError (HttpError, ConsentDenied, ScopeViolation, dll)
+Γöé
+Γö£ΓöÇΓöÇ red          ΓåÆ Red Team methods:
+Γöé   Γö£ΓöÇΓöÇ report_sqli(), report_xss(), report_rce(), report_ssrf()
+Γöé   Γö£ΓöÇΓöÇ report_payment_attack(), report_api_fuzz(), report_mitm()
+Γöé   Γö£ΓöÇΓöÇ report_brute_force(), report_jwt_attack()
+Γöé   Γö£ΓöÇΓöÇ report_supply_chain_attack(), report_social_engineering()
+Γöé   Γö£ΓöÇΓöÇ report_ransomware_sim() ΓÇö simulasi ransomware di sandbox
+Γöé   Γö£ΓöÇΓöÇ report_malware_sim()   ΓÇö simulasi malware di sandbox  ΓåÉ OFFENSIVE TOOL
+Γöé   ΓööΓöÇΓöÇ report_spyware_sim()   ΓÇö simulasi spyware di sandbox  ΓåÉ OFFENSIVE TOOL
+Γöé
+Γö£ΓöÇΓöÇ blue         ΓåÆ Blue Team methods:
+Γöé   Γö£ΓöÇΓöÇ report_anomaly(), report_ip_blocked(), report_session_killed()
+Γöé   Γö£ΓöÇΓöÇ report_patch_applied(), report_firewall_rule()
+Γöé   Γö£ΓöÇΓöÇ report_quarantine(), report_av_scan()
+Γöé   Γö£ΓöÇΓöÇ report_ransomware_detected()   ΓåÉ ANTIVIRUS
+Γöé   Γö£ΓöÇΓöÇ report_spyware_detected()      ΓåÉ ANTI-SPYWARE
+Γöé   Γö£ΓöÇΓöÇ report_rootkit_detected()      ΓåÉ ANTI-ROOTKIT
+Γöé   Γö£ΓöÇΓöÇ request_auto_remediation()     ΓåÉ AI AUTO-PATCH
+Γöé   ΓööΓöÇΓöÇ scan_artifact()                ΓåÉ INTEGRITY SCANNER
+Γöé
+Γö£ΓöÇΓöÇ purple       ΓåÆ Purple Team methods (ALWAYS ON):
+Γöé   Γö£ΓöÇΓöÇ send_telemetry()     ΓåÉ Merkle Chain audit log
+Γöé   Γö£ΓöÇΓöÇ start_battle_session() / end_battle_session()
+Γöé   Γö£ΓöÇΓöÇ correlate_events()   ΓåÉ hubungkan Red event Γåö Blue event
+Γöé   Γö£ΓöÇΓöÇ get_risk_matrix()    ΓåÉ CVSS auto-scoring
+Γöé   Γö£ΓöÇΓöÇ generate_report()    ΓåÉ EXECUTIVE / TECHNICAL / COMPLIANCE
+Γöé   ΓööΓöÇΓöÇ get_audit_trail()    ΓåÉ full Merkle chain log
+Γöé
+ΓööΓöÇΓöÇ dark_intel   ΓåÆ Dark Intelligence methods:
+    Γö£ΓöÇΓöÇ report_ioc(), get_threat_feed()
+    Γö£ΓöÇΓöÇ check_credential_leak()        ΓåÉ SURFACE WEB
+    Γö£ΓöÇΓöÇ report_github_leak()           ΓåÉ SURFACE WEB
+    Γö£ΓöÇΓöÇ report_exposed_service()       ΓåÉ SHODAN/CENSYS
+    Γö£ΓöÇΓöÇ report_underground_intel()     ΓåÉ DEEP WEB
+    Γö£ΓöÇΓöÇ report_tor_intel()             ΓåÉ DARK WEB (Tor)
+    Γö£ΓöÇΓöÇ report_i2p_intel()             ΓåÉ DARK WEB (I2P)
+    Γö£ΓöÇΓöÇ report_anon_network_intel()    ΓåÉ FREENET/ZERONET/LOKINET
+    Γö£ΓöÇΓöÇ report_zero_day()              ΓåÉ ZERO-DAY INTEL
+    Γö£ΓöÇΓöÇ check_exploit_availability()   ΓåÉ EXPLOIT MARKET MONITOR
+    Γö£ΓöÇΓöÇ report_red_c2_sim()            ΓåÉ C2 SIMULATION
+    Γö£ΓöÇΓöÇ report_red_exfil_sim()         ΓåÉ EXFILTRATION SIMULATION
+    Γö£ΓöÇΓöÇ report_apt_simulation()        ΓåÉ APT MULTI-STAGE SIM
+    ΓööΓöÇΓöÇ map_to_mitre()                 ΓåÉ MITRE ATT&CK MAPPING
 ```
 
 ---
 
-## 🏛️ 5 Pilar Strategis Pertahanan Berdaulat (Pre-Adoption Immunity)
+## ≡ƒÅ¢∩╕Å 5 Pilar Strategis Pertahanan Berdaulat (Pre-Adoption Immunity)
 
 Sebelum adopsi massal oleh klien dan publik, SDK dilengkapi 5 modul pertahanan otonom:
 
@@ -244,7 +244,7 @@ Sebelum adopsi massal oleh klien dan publik, SDK dilengkapi 5 modul pertahanan o
 
 ---
 
-## 🔍 Independent Auditor & Third-Party Verification Playbook
+## ≡ƒöì Independent Auditor & Third-Party Verification Playbook
 
 Pihak ketiga, auditor keamanan eksternal, atau CSIRT instansi dapat memverifikasi integritas SDK dan engine secara mandiri:
 
@@ -277,29 +277,29 @@ curl -s -X POST http://127.0.0.1:8080/api/v1/airgap/status | jq .
 
 ---
 
-## 🔗 Integrasi dengan Ekosistem CTAR.Tech
+## ≡ƒöù Integrasi dengan Ekosistem CTAR.Tech
 
 SDK terhubung ke **`gplay.ctar.tech`** sebagai Central AI Data Bank:
 
 ```
 Sistem Klien / Ekosistem Zenty
-    │
-    │  (ZentyTeams SDK embedded)
-    ▼
-gplay.ctar.tech ──► Purple Team AI Analyst
-    │             ──► Risk Matrix Builder
-    │             ──► Merkle Chain Audit Ledger
-    │             ──► Unified Dashboard
-    │
-    ├──► SentinentalOps (bidirectional — incident bridge)
-    ├──► ZentyFinSen (bidirectional — financial intel context)
-    ├──► ZentyElastis (telemetry dari GPU compute nodes)
-    └──► Semua ekosistem Zenty lainnya
+    Γöé
+    Γöé  (ZentyTeams SDK embedded)
+    Γû╝
+gplay.ctar.tech ΓöÇΓöÇΓû║ Purple Team AI Analyst
+    Γöé             ΓöÇΓöÇΓû║ Risk Matrix Builder
+    Γöé             ΓöÇΓöÇΓû║ Merkle Chain Audit Ledger
+    Γöé             ΓöÇΓöÇΓû║ Unified Dashboard
+    Γöé
+    Γö£ΓöÇΓöÇΓû║ SentinentalOps (bidirectional ΓÇö incident bridge)
+    Γö£ΓöÇΓöÇΓû║ ZentyFinSen (bidirectional ΓÇö financial intel context)
+    Γö£ΓöÇΓöÇΓû║ ZentyElastis (telemetry dari GPU compute nodes)
+    ΓööΓöÇΓöÇΓû║ Semua ekosistem Zenty lainnya
 ```
 
 ---
 
-## 🛡️ Security Design & Compliance
+## ≡ƒ¢í∩╕Å Security Design & Compliance
 
 - **Post-Quantum Cryptography**: NIST FIPS 203 (ML-KEM-768) & NIST FIPS 204 (ML-DSA-65).
 - **Consent-first**: Setiap operasi Red Team memerlukan authorized consent cryptographic token.
@@ -310,32 +310,13 @@ gplay.ctar.tech ──► Purple Team AI Analyst
 
 ---
 
-## 🏷️ Version Tagging
+## ≡ƒÅ╖∩╕Å Version Tagging
 - **Current Stable**: `v1.0.0-sovereign`
 - **Milestone Coverage**: M0 (Core), M1 (Offensive), M2 (Defensive), M3 (Forensic WORM), M4 (Command Center), M5 (DarkINT), M6 (National Interop BSSN/Polri/TNI), M7 (PQC Post-Quantum & Sovereign Deception).
 
 ---
 
-## 🏦 Donasi Komunitas & Pembayaran Langganan (Allo Bank)
-
-Dukung kemandirian teknologi pertahanan siber nasional Indonesia dan riset kriptografi pasca-kuantum (PQC) Merkle Ledger:
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  REKENING RESMI DUKUNGAN KOMUNITAS & LISENSI ENTERPRISE    │
-├─────────────────────────────────────────────────────────────┤
-│  Bank      : PT Allo Bank Indonesia Tbk                     │
-│  Layanan   : Donasi Komunitas Open-Source & Pembayaran      │
-│  Kontak WA : 0812 6000 6666 (Konfirmasi Otomatis)           │
-│  Catatan   : Harap sertakan Tenant ID / Nama Institusi      │
-└─────────────────────────────────────────────────────────────┘
-```
-*Konfirmasi donasi dan bukti transfer dapat langsung dikirimkan ke WhatsApp Center [0812 6000 6666](https://wa.me/6281260006666).*
-
----
-
-
-## 📄 License
+## ≡ƒôä License
 AGPL-3.0-or-later | CTARTech Engineering
 `enterprise@ctar.tech` | [ctar.tech](https://ctar.tech)
 

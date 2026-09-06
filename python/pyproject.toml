@@ -1,0 +1,27 @@
+﻿[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zentyteams-sdk"
+version = "0.1.0"
+authors = [
+  { name="CTARTech Indonesia", email="enterprise@ctar.tech" },
+]
+description = "Official Python SDK for ZentyTeamsCore DARKINT 3-IN-1 Autonomous AI Security Platform"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "AGPL-3.0-or-later" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+]
+dependencies = [
+    "requests>=2.28.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/camanit/ZentyTeamsCoreSdks"
+"Documentation" = "https://zentyteamscore.ctar.tech"
