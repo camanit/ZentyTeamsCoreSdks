@@ -316,6 +316,25 @@ gplay.ctar.tech ──► Purple Team AI Analyst
 
 ---
 
+## 🏦 Donasi Komunitas & Pembayaran Langganan (Allo Bank)
+
+Dukung kemandirian teknologi pertahanan siber nasional Indonesia dan riset kriptografi pasca-kuantum (PQC) Merkle Ledger:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  REKENING RESMI DUKUNGAN KOMUNITAS & LISENSI ENTERPRISE    │
+├─────────────────────────────────────────────────────────────┤
+│  Bank      : PT Allo Bank Indonesia Tbk                     │
+│  Layanan   : Donasi Komunitas Open-Source & Pembayaran      │
+│  Kontak WA : 0812 6000 6666 (Konfirmasi Otomatis)           │
+│  Catatan   : Harap sertakan Tenant ID / Nama Institusi      │
+└─────────────────────────────────────────────────────────────┘
+```
+*Konfirmasi donasi dan bukti transfer dapat langsung dikirimkan ke WhatsApp Center [0812 6000 6666](https://wa.me/6281260006666).*
+
+---
+
+
 ## 📄 License
 AGPL-3.0-or-later | CTARTech Engineering
 `enterprise@ctar.tech` | [ctar.tech](https://ctar.tech)
