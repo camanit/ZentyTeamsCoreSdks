@@ -1,0 +1,30 @@
+{
+  "name": "@ctar/zentyteams",
+  "version": "0.1.0",
+  "description": "Official Node.js & TypeScript SDK with Express/Next.js Middleware for ZentyTeamsCore Sovereign Purple Team & DARKINT Orchestrator",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node dist/test.js"
+  },
+  "keywords": [
+    "cybersecurity",
+    "purple-team",
+    "darkint",
+    "sovereign-security",
+    "pqc",
+    "merkle-forensics",
+    "zentyteams",
+    "ctar-tech"
+  ],
+  "author": "CTARTech Network <dev@ctar.tech>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "axios": "^1.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  }
+}
