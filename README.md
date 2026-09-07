@@ -10,6 +10,25 @@
 
 ---
 
+---
+
+## ⚡ Unduh Aplikasi Desktop (Community Edition)
+
+Unduh langsung aplikasi desktop mandiri (**Portable** — tanpa instalasi rumit) untuk sistem operasi Windows 64-bit:
+
+| Berkas | Ukuran | Tautan Unduh Langsung |
+|---|---|---|
+| 🗜️ **Paket Komplit Portable (.ZIP)** | **4.19 MB** | [**Download ZentyTeamsCore-v0.1.0-Community-win64.zip**](dist/ZentyTeamsCore-v0.1.0-Community-win64.zip?raw=true) |
+| ⚡ **Standalone Executable (.EXE)** | **7.69 MB** | [**Download ZentyTeamsCore.exe**](dist/ZentyTeamsCore.exe?raw=true) |
+| 📋 **Panduan Aktivasi Lisensi** | 5.5 KB | [**PANDUAN_AKTIVASI.txt**](dist/PANDUAN_AKTIVASI.txt) |
+| 🔒 **Checksums SHA-256** | 195 B | [**SHA256SUMS.txt**](dist/SHA256SUMS.txt) |
+
+> 🛡️ **Catatan Keamanan & Kedaulatan**:
+> - Modul **Blue Team (Defense & Telemetri RASP)** aktif penuh untuk evaluasi gratis.
+> - Modul ofensif (**Mission Control**, **Red Team**, **Dark Intel**) terkunci rapat (`🔒 LOCK`) demi perlindungan keamanan nasional.
+> - Untuk aktivasi tingkat **Enterprise / Sovereign**, salin **Machine ID** di menu Pengaturan aplikasi dan hubungi hotline kami.
+
+
 ## 🌐 Ekosistem CTAR.Tech yang Dilindungi SDK Ini
 
 SDK ini dirancang untuk **menjaga semua ekosistem berikut tetap aman** — baik internal CTAR.Tech maupun ekosistem pengguna/klien:
