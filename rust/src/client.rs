@@ -45,6 +45,22 @@ impl ZentyTeamsClient {
         }
     }
 
+    pub fn tenant_id(&self) -> &str {
+        &self.tenant_id
+    }
+
+    pub fn base_url(&self) -> &str {
+        &self.base_url
+    }
+
+    pub fn api_key(&self) -> &str {
+        &self.api_key
+    }
+
+    pub fn role(&self) -> &AgentRole {
+        &self.role
+    }
+
     /// Helper: buat header standar untuk setiap request
     pub(crate) fn auth_headers(&self) -> [(&'static str, String); 3] {
         [

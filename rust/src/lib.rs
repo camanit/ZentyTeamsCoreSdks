@@ -55,9 +55,27 @@ pub mod gatekeeper;
 pub mod trust_seal;
 pub mod canary_deception;
 pub mod airgap_sync;
+pub mod autonomous_sentinel;
+pub mod ai_fingerprint;
+pub mod mtd_engine;
+pub mod ai_lure_engine;
+pub mod ml_defense;
+pub mod swarm_neutralizer;
+pub mod deepfake_sentinel;
+pub mod zero_day_synthesizer;
+pub mod predictive_intel;
 
 // Re-export utama agar mudah diakses
 pub use client::ZentyTeamsClient;
+pub use autonomous_sentinel::{AutonomousSentinel, SentinelVerdict, SovereignDistressSignal};
+pub use ai_fingerprint::{AiBehavioralClassifier, AiBehaviorScore, AiAgentArchetype, RequestObservation};
+pub use mtd_engine::{MtdShieldEngine, MtdConfig, ShapeshiftRoute, RaspSignatureVariant, MtdStatusReport};
+pub use ai_lure_engine::{AiLureEngine, AiLureConfig, TrappedAgentProfile};
+pub use ml_defense::{AdversarialMlDefenseEngine, TrainingDataProvenance, GradientDistributionCheck, ModelCheckpointSeal, AdversarialAuditResult};
+pub use swarm_neutralizer::{SwarmNeutralizerEngine, SwarmThreatAssessment, AlliedSwarmBeacon, SwarmObservation};
+pub use deepfake_sentinel::{DeepfakeSentinelEngine, AudioLivenessMetrics, DualPartySignSeal, OutOfBandChallenge};
+pub use zero_day_synthesizer::{ZeroDayPatchSynthesizer, CveVulnerabilityReport, VirtualRaspPatch, MeshPatchBroadcast};
+pub use predictive_intel::{PredictiveIntelEngine, MicroReconObservation, CampaignPrediction, PreemptiveDecoy, BaselineDriftMetric};
 pub use fuzzer::{LogicFuzzer, FuzzResult, FuzzTestCase, ConcurrencyBurstReport};
 pub use ghost_sandbox::{
     GhostTransactionEngine, GhostScenario, GhostAuditReport,

@@ -28,6 +28,12 @@ pub enum EcosystemTarget {
     AncamanId { feed_channel: String },
     /// 12. Super Command Center: National Cyber Command Layer (Polhukam, BSSN, Polri, TNI)
     SuperCommandCenter { classification: String },
+    /// 13. CTARTech-AIControlPlane: Central AI Command Plane & Autonomous Swarm Controller
+    AIControlPlane { endpoint: String },
+    /// 14. ZentyCore: 8-Pillar Zero-Trust Architecture & Automated SOAR (zentycore.ctar.tech)
+    ZentyCore { pillar_mask: u8 },
+    /// 15. NantaraFirmware: NantaraBios & NantaraBoot Hardware Root-of-Trust
+    NantaraFirmware { secure_boot_enforced: bool },
 }
 
 /// Status registrasi dan proteksi node ekosistem
@@ -143,6 +149,24 @@ impl EcosystemBridge {
                 "National Super Command Center",
                 format!("SCC-{}", classification),
                 format!("Kemenko Polhukam Multi-Agency Fusion Command Hub ({})", classification),
+                true,
+            ),
+            EcosystemTarget::AIControlPlane { endpoint } => (
+                "CTARTech-AIControlPlane Sovereign Command",
+                "AICP-MASTER".to_string(),
+                format!("Autonomous Swarm Policy Engine & Red/Blue Mission Orchestration ({})", endpoint),
+                false,
+            ),
+            EcosystemTarget::ZentyCore { pillar_mask } => (
+                "ZentyCore Zero-Trust Sovereign Platform (zentycore.ctar.tech)",
+                format!("ZCORE-P{}", pillar_mask),
+                "8-Pillar Zero-Trust Engine (IAM Ed25519, ZTNA mTLS, Automated 0-sec SOAR, WAF AST)".to_string(),
+                false,
+            ),
+            EcosystemTarget::NantaraFirmware { secure_boot_enforced } => (
+                "NantaraBios & NantaraBoot Hardware Root-of-Trust",
+                "NAN-BIOS".to_string(),
+                format!("Firmware Anti-Bootkit Ring -2 Defense & TPM 2.0 Attestation (Enforced: {})", secure_boot_enforced),
                 true,
             ),
         };

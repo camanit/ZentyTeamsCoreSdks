@@ -1,4 +1,4 @@
-﻿module github.com/camanit/ZentyTeamsCoreSdks/go
+module github.com/camanit/ZentyTeamsCoreSdks/go
 
 go 1.20
 

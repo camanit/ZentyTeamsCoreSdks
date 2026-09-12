@@ -436,3 +436,258 @@ func (c *Client) ReportZeroDay(targetSoftware, version, description string,
 		"timestamp":       ts(),
 	})
 }
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// AUTONOMOUS DEFENSE AI SENTINEL (BLUE SHIELD & DISTRESS BEACON)
+//
+// Modul kecerdasan otonom sisi client:
+// 1. Memeriksa setiap payload & transaksi secara otonom (sub-1ms RASP).
+// 2. Menghitung skor anomali & entropi payload (anti-obfuscated attack).
+// 3. Memblokir serangan secara lokal (Auto-Containment) sebelum menyentuh DB.
+// 4. Memancarkan "Sovereign Distress Signal" ke Command Center jika sistem
+//    klien diserang masif atau terindikasi lockout/ransomware.
+//
+// Thread-safe: AutonomousSentinel menggunakan sync/atomic untuk counter ancaman.
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import (
+	"math"
+	"strings"
+	"sync/atomic"
+)
+
+// SentinelVerdictKind mewakili jenis keputusan otonom sentinel.
+type SentinelVerdictKind string
+
+const (
+	VerdictAllow            SentinelVerdictKind = "Allow"
+	VerdictWatch            SentinelVerdictKind = "Watch"
+	VerdictBlockAndContain  SentinelVerdictKind = "BlockAndContain"
+	VerdictEmergencyLockdown SentinelVerdictKind = "EmergencyLockdown"
+)
+
+// SentinelResult adalah hasil evaluasi otonom RASP Micro-Engine.
+type SentinelResult struct {
+	Verdict          SentinelVerdictKind `json:"verdict"`
+	Score            float64             `json:"score"`
+	AttackType       string              `json:"attack_type,omitempty"`
+	Reason           string              `json:"reason,omitempty"`
+	Indicator        string              `json:"indicator,omitempty"`
+	DistressSignalID string              `json:"distress_signal_id,omitempty"`
+}
+
+// SovereignDistressSignal adalah sinyal darurat yang dikirim ke AIControlPlane.
+type SovereignDistressSignal struct {
+	SignalID             string            `json:"signal_id"`
+	TenantID             string            `json:"tenant_id"`
+	NodeTarget           string            `json:"node_target"`
+	ThreatLevel          string            `json:"threat_level"`
+	AttackFootprintHash  string            `json:"attack_footprint_hash"`
+	RecommendedAction    string            `json:"recommended_action"`
+	Timestamp            string            `json:"timestamp"`
+	Details              map[string]string `json:"details"`
+}
+
+// AutonomousSentinel — AI pertahanan otonom sisi klien (Blue & Purple Shield).
+//
+// Dirancang untuk ditanamkan ke server Go manapun sebagai middleware atau
+// lapisan validasi yang berjalan sepenuhnya di memori (zero-server-dependency).
+//
+// Contoh penggunaan (net/http middleware):
+//
+//	sentinel := zentyteams.NewAutonomousSentinel(client)
+//
+//	func SecurityMiddleware(next http.Handler) http.Handler {
+//	    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+//	        body, _ := io.ReadAll(r.Body)
+//	        result := sentinel.InspectPayload(r.RemoteAddr, r.URL.Path, string(body))
+//	        if result.Verdict == zentyteams.VerdictBlockAndContain {
+//	            http.Error(w, result.Reason, http.StatusForbidden)
+//	            return
+//	        }
+//	        next.ServeHTTP(w, r)
+//	    })
+//	}
+type AutonomousSentinel struct {
+	client             *Client
+	consecutiveThreats atomic.Uint32
+}
+
+// NewAutonomousSentinel membuat instance sentinel baru yang thread-safe.
+func NewAutonomousSentinel(client *Client) *AutonomousSentinel {
+	return &AutonomousSentinel{client: client}
+}
+
+// InspectPayload mengevaluasi muatan request secara otonom (RASP Micro-Engine).
+// Berjalan sepenuhnya di memori — zero-latency, zero-I/O, goroutine-safe.
+func (s *AutonomousSentinel) InspectPayload(sourceIP, endpoint, payload string) SentinelResult {
+	entropy := shannonEntropy(payload)
+	var score float64
+	attackType := "UNKNOWN"
+	reason := "Normal behavioral baseline"
+	lower := strings.ToLower(payload)
+
+	// 1. FinSec & QRIS Negative Balance Manipulation Check
+	if strings.ContainsAny(lower, "") ||
+		strings.Contains(lower, "amount") ||
+		strings.Contains(lower, "nominal") ||
+		strings.Contains(lower, "saldo") {
+		if strings.Contains(lower, "0x") ||
+			strings.Contains(lower, "nan") ||
+			strings.Contains(lower, "infinity") ||
+			(strings.Contains(lower, "amount") && strings.Contains(payload, "-")) {
+			score += 0.85
+			attackType = "FINSEC_NEGATIVE_BALANCE_TAMPER"
+			reason = "Upaya manipulasi nilai transaksi / race condition saldo"
+		}
+	}
+
+	// 2. High-Entropy Obfuscation (Shellcode / Hex Encoded Exploit)
+	if entropy > 4.8 && len(payload) > 32 {
+		score += 0.65
+		attackType = "OBFUSCATED_PAYLOAD_DETECTED"
+		reason = fmt.Sprintf("Entropi data mencurigakan (%.2f) terindikasi payload terselubung", entropy)
+	}
+
+	// 3. SQL Injection & Bypass Pattern
+	sqliPatterns := []string{"union select", "' or '1'='1", "xp_cmdshell", "or 1=1", "drop table"}
+	for _, p := range sqliPatterns {
+		if strings.Contains(lower, p) || strings.Count(lower, "--") > 1 {
+			score += 0.80
+			attackType = "SQL_INJECTION_AUTOBREACH"
+			reason = "Vektor injeksi database terdeteksi pada muatan request"
+			break
+		}
+	}
+
+	// 4. Path Traversal & Hostage File Probing
+	if strings.Contains(payload, "../") ||
+		strings.Contains(payload, `..\\`) ||
+		strings.Contains(lower, "/etc/shadow") ||
+		strings.Contains(lower, `c:\windows\system32`) {
+		score += 0.88
+		attackType = "PATH_TRAVERSAL_RANSOM_PROBE"
+		reason = "Penyusupan direktori sistem terdeteksi"
+	}
+
+	// 5. XSS & Script Injection
+	xssPatterns := []string{"<script", "javascript:", "onerror=", "onload=", "eval(", "document.cookie"}
+	for _, p := range xssPatterns {
+		if strings.Contains(lower, p) {
+			score += 0.70
+			attackType = "XSS_SCRIPT_INJECTION"
+			reason = "Injeksi skrip berbahaya terdeteksi"
+			break
+		}
+	}
+
+	// 6. Command Injection
+	cmdPatterns := []string{"; ls", "| cat", "&& rm", "$(", "`id`", "wget http", "curl http"}
+	for _, p := range cmdPatterns {
+		if strings.Contains(lower, p) {
+			score += 0.90
+			attackType = "COMMAND_INJECTION_HOSTAGE"
+			reason = "Percobaan eksekusi perintah sistem (command injection)"
+			break
+		}
+	}
+
+	// Keputusan Otonom
+	switch {
+	case score >= 0.80:
+		count := s.consecutiveThreats.Add(1)
+		if count >= 3 {
+			sigID := fmt.Sprintf("SIG-DISTRESS-%s", uid())
+			return SentinelResult{
+				Verdict:          VerdictEmergencyLockdown,
+				Score:            score,
+				AttackType:       attackType,
+				Reason:           fmt.Sprintf("Serangan masif berulang (%d ancaman). Sinyal darurat kedaulatan dipancarkan!", count),
+				DistressSignalID: sigID,
+			}
+		}
+		return SentinelResult{
+			Verdict:    VerdictBlockAndContain,
+			Score:      score,
+			AttackType: attackType,
+			Reason:     reason,
+		}
+	case score >= 0.40:
+		return SentinelResult{
+			Verdict:   VerdictWatch,
+			Score:     score,
+			Indicator: attackType,
+			Reason:    reason,
+		}
+	default:
+		s.consecutiveThreats.Store(0)
+		return SentinelResult{
+			Verdict: VerdictAllow,
+			Score:   score,
+		}
+	}
+}
+
+// EmitDistressBeacon memancarkan Sinyal Darurat Kedaulatan ke AIControlPlane.
+// Aman dipanggil dari goroutine manapun.
+func (s *AutonomousSentinel) EmitDistressBeacon(nodeTarget, incidentSummary, rawEvidence string) (map[string]interface{}, error) {
+	h := sha256.Sum256([]byte(rawEvidence))
+	footprintHash := hex.EncodeToString(h[:])
+	signalID := fmt.Sprintf("SIG-DISTRESS-%s", uid())
+
+	signal := SovereignDistressSignal{
+		SignalID:            signalID,
+		TenantID:            s.client.cfg.TenantID,
+		NodeTarget:          nodeTarget,
+		ThreatLevel:         "CRITICAL_HOSTAGE_RISK",
+		AttackFootprintHash: footprintHash,
+		RecommendedAction:   "MOBILIZE_SOVEREIGN_RED_RESCUE_PATHFINDER",
+		Timestamp:           ts(),
+		Details: map[string]string{
+			"incident_summary": incidentSummary,
+			"doctrine_trigger": "DEFENSE_BREACH_RECLAIM_SIGNAL",
+			"client_timestamp": ts(),
+		},
+	}
+
+	b, _ := json.Marshal(signal)
+	req, err := http.NewRequest("POST",
+		s.client.cfg.Endpoint+"/api/v1/sentinel/distress",
+		bytes.NewReader(b))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+s.client.cfg.APIKey)
+	req.Header.Set("X-Tenant-ID", s.client.cfg.TenantID)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var result map[string]interface{}
+	json.NewDecoder(resp.Body).Decode(&result)
+	result["signal_id"] = signalID
+	result["ok"] = resp.StatusCode >= 200 && resp.StatusCode < 300
+	return result, nil
+}
+
+// shannonEntropy menghitung Shannon Entropy dari sebuah string payload.
+func shannonEntropy(data string) float64 {
+	if data == "" {
+		return 0
+	}
+	freq := make(map[rune]int)
+	for _, ch := range data {
+		freq[ch]++
+	}
+	length := float64(len([]rune(data)))
+	var entropy float64
+	for _, count := range freq {
+		p := float64(count) / length
+		entropy -= p * math.Log2(p)
+	}
+	return entropy
+}

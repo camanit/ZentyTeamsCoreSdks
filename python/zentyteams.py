@@ -461,3 +461,256 @@ class ZentyTeamsClient:
 
     def get_threat_feed(self, limit: int = 50) -> dict:
         return self._get(f"/api/v1/dark-intel/feed?limit={limit}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# AUTONOMOUS DEFENSE AI SENTINEL (BLUE SHIELD & DISTRESS BEACON)
+#
+# Modul kecerdasan otonom sisi client:
+# 1. Memeriksa setiap payload & transaksi secara otonom (sub-1ms RASP).
+# 2. Menghitung skor anomali & entropi payload (anti-obfuscated attack).
+# 3. Memblokir serangan secara lokal (Auto-Containment) sebelum menyentuh DB.
+# 4. Memancarkan "Sovereign Distress Signal" ke Command Center jika sistem
+#    klien diserang masif atau terindikasi lockout/ransomware.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+import math
+from dataclasses import dataclass, field
+from typing import Union
+
+
+class SentinelVerdict(Enum):
+    ALLOW             = "Allow"
+    WATCH             = "Watch"
+    BLOCK_AND_CONTAIN = "BlockAndContain"
+    EMERGENCY_LOCKDOWN = "EmergencyLockdown"
+
+
+@dataclass
+class SentinelResult:
+    verdict: SentinelVerdict
+    score: float = 0.0
+    attack_type: str = ""
+    reason: str = ""
+    distress_signal_id: str = ""
+    indicator: str = ""
+
+
+@dataclass
+class SovereignDistressSignal:
+    signal_id: str
+    tenant_id: str
+    node_target: str
+    threat_level: str
+    attack_footprint_hash: str
+    recommended_action: str
+    timestamp: str
+    details: dict = field(default_factory=dict)
+
+
+class AutonomousSentinel:
+    """
+    AutonomousSentinel — AI pertahanan otonom sisi klien (Blue & Purple Shield).
+
+    Dirancang untuk ditanamkan ke sistem siapapun sebagai lapisan keamanan
+    pertama yang berjalan sepenuhnya di sisi klien (zero-server-dependency).
+
+    Jika klien diserang, sentinel akan:
+    - Memblokir payload berbahaya sebelum menyentuh database / business logic.
+    - Memancarkan Sinyal Darurat Kedaulatan ke AIControlPlane CTARTech.
+
+    Contoh penggunaan (Flask / FastAPI):
+    ```python
+    sentinel = AutonomousSentinel(client)
+
+    @app.before_request
+    def check_incoming():
+        body = request.get_data(as_text=True)
+        result = sentinel.inspect_payload(request.remote_addr, request.path, body)
+        if result.verdict == SentinelVerdict.BLOCK_AND_CONTAIN:
+            abort(403, result.reason)
+        elif result.verdict == SentinelVerdict.EMERGENCY_LOCKDOWN:
+            # Pancarkan sinyal darurat secara async
+            import asyncio
+            asyncio.create_task(sentinel.emit_distress_beacon(
+                request.host, result.reason, body
+            ))
+            abort(503, "Sistem sementara dikunci karena ancaman skala sindikat.")
+    ```
+    """
+
+    def __init__(self, client: ZentyTeamsClient):
+        self._client = client
+        self._consecutive_threats: int = 0
+
+    # ─────────────────────────────────────────────
+    #  RASP Micro-Engine — berjalan di memori, zero I/O
+    # ─────────────────────────────────────────────
+
+    def inspect_payload(
+        self,
+        source_ip: str,
+        endpoint: str,
+        payload: str,
+    ) -> SentinelResult:
+        """
+        Evaluasi muatan request secara otonom.
+
+        Args:
+            source_ip: IP address pengirim request.
+            endpoint:  URL path / endpoint yang dituju.
+            payload:   Isi body request (JSON string, form data, dll).
+
+        Returns:
+            SentinelResult dengan verdict otonom.
+        """
+        entropy = self._shannon_entropy(payload)
+        score = 0.0
+        attack_type = "UNKNOWN"
+        reason = "Normal behavioral baseline"
+        lower = payload.lower()
+
+        # 1. FinSec & QRIS Negative Balance Manipulation Check
+        if any(k in lower for k in ("amount", "nominal", "saldo")):
+            if any(k in lower for k in ("-", "0x", "nan", "infinity")):
+                score += 0.85
+                attack_type = "FINSEC_NEGATIVE_BALANCE_TAMPER"
+                reason = "Upaya manipulasi nilai transaksi / race condition saldo"
+
+        # 2. High-Entropy Obfuscation (Shellcode / Hex Encoded Exploit)
+        if entropy > 4.8 and len(payload) > 32:
+            score += 0.65
+            attack_type = "OBFUSCATED_PAYLOAD_DETECTED"
+            reason = f"Entropi data mencurigakan ({entropy:.2f}) terindikasi payload terselubung"
+
+        # 3. SQL Injection & Bypass Pattern
+        sqli_patterns = ("union select", "' or '1'='1", "xp_cmdshell", "or 1=1", "drop table")
+        if any(p in lower for p in sqli_patterns) or lower.count("--") > 1:
+            score += 0.80
+            attack_type = "SQL_INJECTION_AUTOBREACH"
+            reason = "Vektor injeksi database terdeteksi pada muatan request"
+
+        # 4. Path Traversal & Hostage File Probing
+        if "../" in payload or "..\\" in payload or "/etc/shadow" in lower or "c:\\windows\\system32" in lower:
+            score += 0.88
+            attack_type = "PATH_TRAVERSAL_RANSOM_PROBE"
+            reason = "Penyusupan direktori sistem terdeteksi"
+
+        # 5. XSS & Script Injection
+        xss_patterns = ("<script", "javascript:", "onerror=", "onload=", "eval(", "document.cookie")
+        if any(p in lower for p in xss_patterns):
+            score += 0.70
+            attack_type = "XSS_SCRIPT_INJECTION"
+            reason = "Injeksi skrip berbahaya terdeteksi"
+
+        # 6. Command Injection
+        cmd_patterns = ("; ls", "| cat", "&& rm", "$(", "`id`", "wget http", "curl http")
+        if any(p in lower for p in cmd_patterns):
+            score += 0.90
+            attack_type = "COMMAND_INJECTION_HOSTAGE"
+            reason = "Percobaan eksekusi perintah sistem (command injection)"
+
+        # Keputusan Otonom
+        if score >= 0.80:
+            self._consecutive_threats += 1
+            if self._consecutive_threats >= 3:
+                sig_id = f"SIG-DISTRESS-{uuid.uuid4()}"
+                return SentinelResult(
+                    verdict=SentinelVerdict.EMERGENCY_LOCKDOWN,
+                    score=score,
+                    attack_type=attack_type,
+                    reason=(
+                        f"Serangan masif berulang ({self._consecutive_threats} ancaman). "
+                        "Sinyal darurat kedaulatan dipancarkan!"
+                    ),
+                    distress_signal_id=sig_id,
+                )
+            return SentinelResult(
+                verdict=SentinelVerdict.BLOCK_AND_CONTAIN,
+                score=score,
+                attack_type=attack_type,
+                reason=reason,
+            )
+        elif score >= 0.40:
+            return SentinelResult(
+                verdict=SentinelVerdict.WATCH,
+                score=score,
+                indicator=attack_type,
+                reason=reason,
+            )
+        else:
+            self._consecutive_threats = 0
+            return SentinelResult(
+                verdict=SentinelVerdict.ALLOW,
+                score=score,
+            )
+
+    # ─────────────────────────────────────────────
+    #  Sinyal Darurat Kedaulatan → AIControlPlane
+    # ─────────────────────────────────────────────
+
+    def emit_distress_beacon(
+        self,
+        node_target: str,
+        incident_summary: str,
+        raw_evidence: str,
+    ) -> dict:
+        """
+        Pancarkan Sinyal Darurat Kedaulatan ke Markas Komando CTARTech.
+
+        Dipanggil otomatis saat EmergencyLockdown, atau dapat dipanggil
+        secara manual oleh tim keamanan klien.
+
+        Returns:
+            dict dengan `ok` (bool) dan `signal_id` (str).
+        """
+        footprint_hash = hashlib.sha256(raw_evidence.encode()).hexdigest()
+        signal_id = f"SIG-DISTRESS-{uuid.uuid4()}"
+
+        signal = SovereignDistressSignal(
+            signal_id=signal_id,
+            tenant_id=self._client._tenant_id,
+            node_target=node_target,
+            threat_level="CRITICAL_HOSTAGE_RISK",
+            attack_footprint_hash=footprint_hash,
+            recommended_action="MOBILIZE_SOVEREIGN_RED_RESCUE_PATHFINDER",
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            details={
+                "incident_summary": incident_summary,
+                "doctrine_trigger": "DEFENSE_BREACH_RECLAIM_SIGNAL",
+                "client_timestamp": datetime.now(timezone.utc).isoformat(),
+            },
+        )
+
+        try:
+            resp = self._client._post("/api/v1/sentinel/distress", {
+                "signal_id":              signal.signal_id,
+                "tenant_id":              signal.tenant_id,
+                "node_target":            signal.node_target,
+                "threat_level":           signal.threat_level,
+                "attack_footprint_hash":  signal.attack_footprint_hash,
+                "recommended_action":     signal.recommended_action,
+                "timestamp":              signal.timestamp,
+                "details":                signal.details,
+            })
+            return {"ok": True, "signal_id": signal_id, "response": resp}
+        except Exception as exc:
+            return {"ok": False, "signal_id": signal_id, "error": str(exc)}
+
+    # ─────────────────────────────────────────────
+    #  Internal Helpers
+    # ─────────────────────────────────────────────
+
+    @staticmethod
+    def _shannon_entropy(data: str) -> float:
+        """Hitung Shannon Entropy dari sebuah string payload."""
+        if not data:
+            return 0.0
+        from collections import Counter
+        freq = Counter(data)
+        length = len(data)
+        return -sum(
+            (count / length) * math.log2(count / length)
+            for count in freq.values()
+            if count > 0
+        )

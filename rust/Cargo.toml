@@ -1,10 +1,10 @@
-﻿[package]
+[package]
 name = "zentyteams-sdk"
 version = "0.1.0"
 edition = "2021"
 authors = ["CTARTech Indonesia <enterprise@ctar.tech>"]
 license = "AGPL-3.0-or-later"
-description = "Official Rust SDK for ZentyTeamsCore ΓÇö DARKINT 3-IN-1 Autonomous AI Security Platform"
+description = "Official Rust SDK for ZentyTeamsCore — DARKINT 3-IN-1 Autonomous AI Security Platform"
 repository = "https://github.com/camanit/ZentyTeamsCoreSdks"
 keywords = ["security", "redteam", "blueteam", "pentest", "ai"]
 categories = ["network-programming", "authentication"]
